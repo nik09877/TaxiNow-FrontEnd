@@ -33,7 +33,7 @@ export const requestRide = (reqData) => {
     try {
       const { data } = await api.post(`/ride/request`, reqData.location);
 
-      console.log('data --- ', data);
+      //'data --- ', data;
 
       dispatch({
         type: REQUEST_RIDE_SUCCESS,
@@ -45,7 +45,7 @@ export const requestRide = (reqData) => {
     } catch (error) {
       dispatch({
         type: REQUEST_RIDE_FAILURE,
-        payload: error.message,
+        payload: error.response.data.error ?? error.message,
       });
     }
   };
@@ -58,9 +58,9 @@ export const findRideById = (id) => {
       const { data } = await api.get(`/ride/${+id}`);
       dispatch(findRideByIdSuccess(data));
 
-      console.log('ride details - ', data);
+      // 'ride details - ', data;
     } catch (error) {
-      dispatch(findRideByIdFailure(error.message));
+      dispatch(findRideByIdFailure(error.response.data.error ?? error.message));
     }
   };
 };
@@ -72,31 +72,31 @@ export const acceptRideAction = (id) => {
       const { data } = await api.put(`/ride/${+id}/accept`);
       dispatch(acceptRideSuccess(data));
 
-      console.log('decline - ', data);
+      //'decline - ', data;
     } catch (error) {
-      dispatch(acceptRideFailure(error.message));
+      dispatch(acceptRideFailure(error.response.data.error ?? error.message));
     }
   };
 };
 
 export const declineRideAction = (id) => {
-  console.log('decline ride action');
 
+  // ('decline ride action');
   return async (dispatch) => {
     dispatch(declineRide());
     try {
       const { data } = await api.put(`/ride/${+id}/decline`);
       dispatch(declineRideSuccess(data));
 
-      console.log('decline - ', data);
+      // 'decline - ', data;
     } catch (error) {
-      dispatch(declineRideFailure(error.message));
+      dispatch(declineRideFailure(error.response.data.error ?? error.message));
     }
   };
 };
 
 export const startRideAction = (req) => {
-  console.log('start ride action');
+  //('start ride action');
 
   return async (dispatch) => {
     dispatch(startRide());
@@ -104,15 +104,15 @@ export const startRideAction = (req) => {
       const { data } = await api.put(`/ride/${+req.id}/start`, req.data);
       dispatch(startRideSuccess(data));
 
-      console.log('start ride - ', data);
+      //'start ride - ', data;
     } catch (error) {
-      dispatch(startRideFailure(error.message));
+      dispatch(startRideFailure(error.response.data.error ?? error.message));
     }
   };
 };
 
 export const completeRideAction = (id) => {
-  console.log('complete ride action');
+  // ('complete ride action');
 
   return async (dispatch) => {
     // dispatch(startRide());
@@ -120,16 +120,17 @@ export const completeRideAction = (id) => {
       const { data } = await api.put(`/ride/${id}/complete`);
       dispatch(finishRideSuccess(data));
 
-      console.log('finish ride - ', data);
+      // 'finish ride - ', data;
     } catch (error) {
       // dispatch(startRideFailure(error.message));
-      console.log(error.catch);
+      dispatch(startRideFailure(error.response.data.error ?? error.message));
+      error.catch;
     }
   };
 };
 
 // export const currentRideAction = (id) => {
-//   console.log("current ride action")
+//   ("current ride action")
 
 //   return async (dispatch) => {
 //     dispatch(currentRide());
@@ -137,7 +138,7 @@ export const completeRideAction = (id) => {
 //       const { data } = await api.get(`/drivers/${+id}/current_ride`);
 //       dispatch(currentRideSuccess(data));
 
-//       console.log("current ride - ",data)
+//       ("current ride - ",data)
 //     } catch (error) {
 //       dispatch(currentRideFailure(error.message));
 //     }
@@ -152,7 +153,7 @@ export const searchLocation = (query) => {
 
     try {
       const response = await axios.get(url);
-      console.log('search result -- ', response.data);
+      // 'search result -- ', response.data;
       dispatch(searchSuccess(response.data));
     } catch (error) {
       dispatch(searchFailure(error.message));

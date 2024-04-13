@@ -12,7 +12,7 @@ export const getCompletedRides = () => {
     try {
       const { data } = await api.get('/user/rides/completed');
 
-      console.log('users completed rides', data);
+      // 'users completed rides', data;
 
       dispatch({
         type: GET_COMPLETED_RIDES_SUCCESS,
@@ -21,7 +21,7 @@ export const getCompletedRides = () => {
     } catch (error) {
       dispatch({
         type: GET_COMPLETED_RIDES_FAILURE,
-        payload: error.message,
+        payload: error.response.data.error ?? error.message,
       });
     }
   };
@@ -33,23 +33,23 @@ export const generatePaymentLink = (rideId) => {
 
     try {
       const { data } = await api.post(`/payments/${+rideId}`);
-
-      console.log('payment', data);
+      console.log(data);
+      // 'payment', data;
 
       // dispatch({
       //   type: GET_COMPLETED_RIDES_SUCCESS,
       //   payload: data,
       // });
 
-      if (data.paymentLinkUrl) {
-        window.location.href = data.paymentLinkUrl;
-      }
+      // if (data.paymentLinkUrl) {
+      //   window.location.href = data.paymentLinkUrl;
+      // }
     } catch (error) {
-      // dispatch({
-      //   type: GET_COMPLETED_RIDES_FAILURE,
-      //   payload: error.message,
-      // });
-      console.log('error ', error);
+      dispatch({
+        type: GET_COMPLETED_RIDES_FAILURE,
+        payload: error.response.data.error ?? error.message,
+      });
+      'error ', error;
     }
   };
 };

@@ -61,50 +61,58 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function DriverNavbar({handleSideBarViewInMobile}) {
+export default function DriverNavbar({ handleSideBarViewInMobile }) {
   const theme = useTheme();
   const isLargeScreen = useMediaQuery(theme.breakpoints.up('lg'));
   const dispatch = useDispatch();
-  const { auth, driver,ride } = useSelector((store) => store);
+  const auth = useSelector((store) => store.auth);
 
-console.log("nav driver",auth)
- 
+  // 'nav driver', auth;
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + isLargeScreen, backgroundColor: 'rgb(0, 0, 22)' }}>
+      <AppBar
+        position='fixed'
+        sx={{
+          zIndex: (theme) => theme.zIndex.drawer + isLargeScreen,
+          backgroundColor: 'rgb(0, 0, 22)',
+        }}
+      >
         <Toolbar>
-
           {/* <Avatar alt="Zosh" src="https://olawebcdn.com/images/v1/logos/olalogo@3x.png" /> */}
-          <img className="h-10" src="https://olawebcdn.com/images/v1/logos/olalogo@3x.png" alt="" />
+          <img
+            className='h-10'
+            src='https://olawebcdn.com/images/v1/logos/olalogo@3x.png'
+            alt=''
+          />
           <Search>
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
             <StyledInputBase
-              placeholder="Search…"
+              placeholder='Search…'
               inputProps={{ 'aria-label': 'search' }}
             />
           </Search>
           <Box sx={{ flexGrow: 1 }} />
-          <Box sx={{ display: { xs: 'none', md: 'flex',alignItems:'center' } }}>
-           <p> {auth.user?.name}</p>
+          <Box
+            sx={{ display: { xs: 'none', md: 'flex', alignItems: 'center' } }}
+          >
+            <p> {auth.user?.name}</p>
             <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
+              size='large'
+              edge='end'
+              aria-label='account of current user'
               // aria-controls={menuId}
-              aria-haspopup="true"
+              aria-haspopup='true'
               // onClick={handleProfileMenuOpen}
-              color="inherit"
+              color='inherit'
             >
               <AccountCircle />
             </IconButton>
           </Box>
-          
         </Toolbar>
       </AppBar>
-      
     </Box>
   );
 }

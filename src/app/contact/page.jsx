@@ -1,6 +1,5 @@
-"use client"
-import { useState } from "react";
-
+'use client';
+import { useState } from 'react';
 
 const ContactPage = () => {
   const [name, setName] = useState('');
@@ -10,7 +9,7 @@ const ContactPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Handle form submission, e.g., send the data to a server or trigger an email notification
-    console.log('Form submitted:', { name, email, message });
+    //'Form submitted:', { name, email, message };
     // Reset form fields
     setName('');
     setEmail('');
@@ -25,7 +24,7 @@ const ContactPage = () => {
         <label>
           Name:
           <input
-            type="text"
+            type='text'
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
@@ -34,7 +33,7 @@ const ContactPage = () => {
         <label>
           Email:
           <input
-            type="email"
+            type='email'
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
@@ -48,7 +47,7 @@ const ContactPage = () => {
           ></textarea>
         </label>
         <br />
-        <button type="submit">Submit</button>
+        <button type='submit'>Submit</button>
       </form>
     </div>
   );

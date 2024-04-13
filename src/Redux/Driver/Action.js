@@ -15,10 +15,10 @@ export const getDriversCurrentRide = (id) => async (dispatch) => {
   try {
     const response = await api.get(`/driver/current_ride`);
     const ride = response.data;
-    console.log('current ride - ', ride);
+    //'current ride - ', ride;
     dispatch(getCurrentRideSuccess(ride));
   } catch (error) {
-    dispatch(getCurrentRideFailure(error));
+    dispatch(getCurrentRideFailure(error.response.data.error ?? error.message));
   }
 };
 
@@ -28,10 +28,10 @@ export const getAllocatedRides = (id) => async (dispatch) => {
   try {
     const response = await api.get(`/driver/allocated`);
     const ride = response.data;
-    console.log('allocated ride - ', ride);
+   // 'allocated ride - ', ride;
     dispatch(allocatedRideSuccess(ride));
   } catch (error) {
-    dispatch(allocatedRideFailure(error));
+    dispatch(allocatedRideFailure(error.response.data.error ?? error.message));
   }
 };
 
@@ -41,9 +41,9 @@ export const getDriversCompletedRide = () => async (dispatch) => {
   try {
     const response = await api.get(`/driver/rides/completed`);
     const ride = response.data;
-    console.log('completed ride - ', ride);
+  //  'completed ride - ', ride;
     dispatch(completedRideSuccess(ride));
   } catch (error) {
-    dispatch(getCurrentRideFailure(error));
+    dispatch(getCurrentRideFailure(error.response.data.error ?? error.message));
   }
 };

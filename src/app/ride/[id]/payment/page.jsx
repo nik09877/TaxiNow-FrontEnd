@@ -1,13 +1,21 @@
-"use client"
-import React from 'react'
-import PaymentPage from './PaymentPage'
-import Layout from '@/components/User/Layout/Layout'
+'use client';
+import React, { useEffect } from 'react';
+import PaymentPage from './PaymentPage';
+import Layout from '@/components/User/Layout/Layout';
+import { useRouter } from 'next/navigation';
+import { useSelector } from 'react-redux';
 
 const page = (props) => {
-    console.log("ride id --- ",props.params.id)
-  return (
-    <Layout children={<PaymentPage rideId={props.params.id} />}></Layout>
-  )
-}
+  const router = useRouter();
+  const auth = useSelector((store) => store.auth);
 
-export default page
+  useEffect(() => {
+    if (!auth?.user?.role || !auth.user?.fullName || !auth.user?.name) {
+      router.push('/login');
+    }
+  }, [auth.user]);
+  // 'ride id --- ', props.params.id;
+  return <Layout children={<PaymentPage rideId={props.params.id} />}></Layout>;
+};
+
+export default page;

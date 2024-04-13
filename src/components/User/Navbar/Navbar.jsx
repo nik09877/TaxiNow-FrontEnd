@@ -22,14 +22,14 @@ export default function Navbar() {
   const handleSidebarClose = () => setSideBarOpen(false);
   const router = useRouter();
   const dispatch = useDispatch();
-  const { auth } = useSelector((store) => store);
+  const auth = useSelector((store) => store.auth);
   const jwt = localStorage.getItem('jwt');
   // const router = useRouter();
 
-  // console.log("auth ------- ", auth);
+  // ("auth ------- ", auth);
 
   React.useEffect(() => {
-    // console.log("jwt --- ", jwt);
+    // ("jwt --- ", jwt);
     if (jwt) {
       dispatch(getUser(jwt));
     }
@@ -43,15 +43,6 @@ export default function Navbar() {
         position='static'
       >
         <Toolbar>
-          <IconButton
-            size='large'
-            edge='start'
-            color='inherit'
-            aria-label='menu'
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon onClick={handleSideBarOpen} />
-          </IconButton>
           <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
             Taxi Now
           </Typography>

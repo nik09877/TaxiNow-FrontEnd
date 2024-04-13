@@ -1,39 +1,46 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState } from "react";
-import { TextField, Button, Container, Grid } from "@mui/material";
-import { useRouter } from "next/navigation";
-import WestIcon from "@mui/icons-material/West";
-import { useDispatch, useSelector } from "react-redux";
-import { getDriver, getUser, registerDriver } from "@/Redux/Auth/Action";
+import React, { useEffect, useState } from 'react';
+import { TextField, Button, Container, Grid } from '@mui/material';
+import { useRouter } from 'next/navigation';
+import WestIcon from '@mui/icons-material/West';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  clearError,
+  getDriver,
+  getUser,
+  registerDriver,
+} from '@/Redux/Auth/Action';
+import CustomSnackBar from '../snackbar/CustomSnackBar';
+import { SEVERITY } from '@/config/constants';
 
 const DriverRegisterForm = () => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const jwt = localStorage.getItem("jwt");
-  const { auth } = useSelector((store) => store);
+  const jwt = localStorage.getItem('jwt');
+  const auth = useSelector((store) => store.auth);
 
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    mobile: "",
-    password: "",
+    name: '',
+    email: '',
+    mobile: '',
+    password: '',
     latitude: 0,
     longitude: 0,
   });
 
   const [licenseData, setLicenseData] = useState({
-    licenseNumber: "",
-    licenseState: "",
-    licenseExpirationDate: "",
+    licenseNumber: '',
+    licenseState: '',
+    licenseExpirationDate: '',
   });
 
   const [vehicleData, setVehicleData] = useState({
-    make: "",
-    model: "",
+    make: '',
+    model: '',
     year: 0,
-    licensePlate: "",
-    color: "",
+    licensePlate: '',
+    color: '',
     capacity: 0,
   });
 
@@ -56,194 +63,209 @@ const DriverRegisterForm = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log({ ...formData, vehicle: vehicleData, license: licenseData });
-    const driverData={ ...formData, vehicle: vehicleData, license: licenseData }
-    dispatch(registerDriver(driverData))
+    const driverData = {
+      ...formData,
+      vehicle: vehicleData,
+      license: licenseData,
+    };
+    dispatch(registerDriver(driverData));
   };
 
   const goBack = () => {
+    dispatch(clearError());
     router.back();
   };
   useEffect(() => {
-    console.log("jwt --- ",jwt)
+    //'jwt --- ', jwt;
     if (jwt) {
-      dispatch(getUser(jwt));
+      dispatch(getDriver(jwt));
     }
   }, [jwt]);
 
   useEffect(() => {
     if (auth.user) {
-      router.push("/driver/dashbord")
+      router.push('/driver/dashbord');
     }
   }, [auth.user]);
   return (
-    <Container className="h-screen">
-      <div className="flex items-center py-5">
-        <WestIcon onClick={goBack} className="cursor-pointer" />
-        <p className="text-center w-full font-semibold text-2xl ">
-          Driver Registration
-        </p>
-      </div>
-      <form onSubmit={handleSubmit}>
-        <Grid container spacing={2}>
-          <Grid item xs={6}>
-            <TextField
-              label="Name"
-              name="name"
-              value={formData.name}
-              onChange={handleInputChange}
-              required
-              fullWidth
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <TextField
-              label="Email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              required
-              fullWidth
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <TextField
-              label="Mobile"
-              name="mobile"
-              value={formData.mobile}
-              onChange={handleInputChange}
-              required
-              fullWidth
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <TextField
-              label="Password"
-              name="password"
-              value={formData.password}
-              onChange={handleInputChange}
-              type="password"
-              required
-              fullWidth
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <TextField
-              label="Latitude"
-              name="latitude"
-              type="number"
-              value={formData.latitude}
-              onChange={handleInputChange}
-              required
-              fullWidth
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <TextField
-              label="Longitude"
-              name="longitude"
-              type="number"
-              value={formData.longitude}
-              onChange={handleInputChange}
-              required
-              fullWidth
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              label="License Number"
-              name="licenseNumber"
-              value={licenseData.licenseNumber}
-              onChange={handleLicenceData}
-              required
-              fullWidth
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <TextField
-              label="License State"
-              name="licenseState"
-              value={licenseData.licenseState}
-              onChange={handleLicenceData}
-              required
-              fullWidth
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <TextField
-              label="License Expiration Date"
-              name="licenseExpirationDate"
-              value={licenseData.licenseExpirationDate}
-              onChange={handleLicenceData}
-              required
-              fullWidth
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <TextField
-              label="Vehicle Make"
-              name="make"
-              value={vehicleData.make}
-              onChange={handleVehicleData}
-              required
-              fullWidth
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <TextField
-              label="Vehicle Model"
-              name="model"
-              value={vehicleData.model}
-              onChange={handleVehicleData}
-              required
-              fullWidth
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <TextField
-              label="Vehicle Year"
-              name="year"
-              type="number"
-              value={vehicleData.year}
-              onChange={handleVehicleData}
-              required
-              fullWidth
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <TextField
-              label="License Plate"
-              name="licensePlate"
-              value={vehicleData.licensePlate}
-              onChange={handleVehicleData}
-              required
-              fullWidth
-            />
-          </Grid>
-          <Grid item xs={6}>
-            <TextField
-              label="Vehicle Color"
-              name="color"
-              value={vehicleData.color}
-              onChange={handleVehicleData}
-              required
-              fullWidth
-            />
-          </Grid>
+    <>
+      {auth.error && (
+        <CustomSnackBar
+          open={true}
+          duration={1500}
+          severity={SEVERITY.ERROR}
+          msg={auth.error}
+        />
+      )}
+      <Container className='h-screen'>
+        <div className='flex items-center py-5'>
+          <WestIcon onClick={goBack} className='cursor-pointer' />
+          <p className='text-center w-full font-semibold text-2xl '>
+            Driver Registration
+          </p>
+        </div>
+        <form onSubmit={handleSubmit}>
+          <Grid container spacing={2}>
+            <Grid item xs={6}>
+              <TextField
+                label='Name'
+                name='name'
+                value={formData.name}
+                onChange={handleInputChange}
+                required
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                label='Email'
+                name='email'
+                value={formData.email}
+                onChange={handleInputChange}
+                required
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                label='Mobile'
+                name='mobile'
+                value={formData.mobile}
+                onChange={handleInputChange}
+                required
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                label='Password'
+                name='password'
+                value={formData.password}
+                onChange={handleInputChange}
+                type='password'
+                required
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                label='Latitude'
+                name='latitude'
+                type='number'
+                value={formData.latitude}
+                onChange={handleInputChange}
+                required
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                label='Longitude'
+                name='longitude'
+                type='number'
+                value={formData.longitude}
+                onChange={handleInputChange}
+                required
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                label='License Number'
+                name='licenseNumber'
+                value={licenseData.licenseNumber}
+                onChange={handleLicenceData}
+                required
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                label='License State'
+                name='licenseState'
+                value={licenseData.licenseState}
+                onChange={handleLicenceData}
+                required
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                label='License Expiration Date'
+                name='licenseExpirationDate'
+                value={licenseData.licenseExpirationDate}
+                onChange={handleLicenceData}
+                required
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={4}>
+              <TextField
+                label='Vehicle Maker'
+                name='make'
+                value={vehicleData.make}
+                onChange={handleVehicleData}
+                required
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={4}>
+              <TextField
+                label='Vehicle Model'
+                name='model'
+                value={vehicleData.model}
+                onChange={handleVehicleData}
+                required
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={4}>
+              <TextField
+                label='Vehicle Year'
+                name='year'
+                type='number'
+                value={vehicleData.year}
+                onChange={handleVehicleData}
+                required
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                label='License Plate'
+                name='licensePlate'
+                value={vehicleData.licensePlate}
+                onChange={handleVehicleData}
+                required
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                label='Vehicle Color'
+                name='color'
+                value={vehicleData.color}
+                onChange={handleVehicleData}
+                required
+                fullWidth
+              />
+            </Grid>
 
-          <Grid item xs={12}>
-            <Button
-              className="w-full my-3"
-              type="submit"
-              variant="contained"
-              color="secondary"
-              sx={{ padding: ".9rem 0rem" }}
-            >
-              Register
-            </Button>
+            <Grid item xs={12}>
+              <Button
+                className='w-full my-3'
+                type='submit'
+                variant='contained'
+                color='secondary'
+                sx={{ padding: '.9rem 0rem' }}
+              >
+                Register
+              </Button>
+            </Grid>
           </Grid>
-        </Grid>
-      </form>
-    </Container>
+        </form>
+      </Container>
+    </>
   );
 };
 

@@ -1,36 +1,46 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import DriversRide from "./DriversRide";
-import RideCard from "../User/RidesCard/RideCard";
-import BlockIcon from "@mui/icons-material/Block";
-import { Card, CardHeader, useStepContext } from "@mui/material";
-import AllocatedRideCard from "./AllocatedRideCard";
-import { getUser } from "@/Redux/Auth/Action";
-import { useDispatch, useSelector } from "react-redux";
-import { useRouter } from "next/navigation";
+'use client';
+import React, { useEffect, useState } from 'react';
+import DriversRide from './DriversRide';
+import RideCard from '../User/RidesCard/RideCard';
+import BlockIcon from '@mui/icons-material/Block';
+import { Card, CardHeader, useStepContext } from '@mui/material';
+import AllocatedRideCard from './AllocatedRideCard';
+import { getDriver, getUser } from '@/Redux/Auth/Action';
+import { useDispatch, useSelector } from 'react-redux';
+import { useRouter } from 'next/navigation';
 
 import {
   getAllocatedRides,
   getDriversCompletedRide,
   getDriversCurrentRide,
-} from "@/Redux/Driver/Action";
-import { currentRideAction } from "../../Redux/Ride/Action";
+} from '@/Redux/Driver/Action';
+import { currentRideAction } from '../../Redux/Ride/Action';
 
 const Dashbord = () => {
-  const [isCurrentRide, setIsCurrentRide] = useState(false);
-  const [isAllocated, setIsAllocated] = useState(false);
-  const { auth, driver, ride } = useSelector((store) => store);
+  // const [isCurrentRide, setIsCurrentRide] = useState(false);
+  // const [isAllocated, setIsAllocated] = useState(false);
+  const { auth, driver, ride } = useSelector((store) => ({
+    auth: store.auth,
+    driver: store.driver,
+    ride: store.ride,
+  }));
   const dispatch = useDispatch();
-  const jwt = localStorage.getItem("jwt");
-  const router=useRouter();
 
+  let jwt = ''; // Initialize jwt variable
 
-  console.log("ride",ride)
+  if (typeof window !== 'undefined') {
+    // Check if window is defined (i.e., we're in the browser environment)
+    jwt = localStorage.getItem('jwt');
+  }
+  // const jwt = localStorage.getItem('jwt');
+  const router = useRouter();
 
-  useEffect(()=>{
+  //'ride', ride;
+
+  useEffect(() => {
     dispatch(getDriversCompletedRide());
-    dispatch(getUser(jwt));
-  },[ride.finisheRide])
+    dispatch(getDriver(jwt));
+  }, [ride.finisheRide]);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -41,7 +51,6 @@ const Dashbord = () => {
     return () => {
       clearInterval(intervalId);
     };
-   
   }, [auth.user?.id]);
 
   useEffect(() => {
@@ -51,29 +60,35 @@ const Dashbord = () => {
   }, [auth.user?.id, ride.decliningRide]);
 
   useEffect(() => {
-    if(!auth.user) {
-      // router.push("/login")
+    if (!auth.user) {
+      router.replace('/login');
     }
 
     if (auth.user?.id) {
       dispatch(getDriversCurrentRide(auth.user?.id));
     }
-  }, [auth.user?.id, ride.acceptingRide, ride.startRide, ride.completedRide,ride.finisheRide]);
+  }, [
+    auth.user?.id,
+    ride.acceptingRide,
+    ride.startRide,
+    ride.completedRide,
+    ride.finisheRide,
+  ]);
 
   return (
-    <div className="">
+    <div className=''>
       <DriversRide />
 
-      <Card className="mt-5  py-5">
+      <Card className='mt-5  py-5'>
         <CardHeader
-          className="font-bold"
-          title="Current Ride"
+          className='font-bold'
+          title='Current Ride'
           titleTypographyProps={{
             sx: {
               mb: 2.5,
-              lineHeight: "2rem !important",
-              letterSpacing: "0.15px !important",
-              fontWeight: "bold",
+              lineHeight: '2rem !important',
+              letterSpacing: '0.15px !important',
+              fontWeight: 'bold',
             },
           }}
         />
@@ -82,45 +97,43 @@ const Dashbord = () => {
           <AllocatedRideCard
             key={ride.id}
             ride={driver.currentRide}
-            type={"Current"}
+            type={'Current'}
           />
         ) : (
-          <div className="w-full flex flex-col items-center justify-center py-5">
-            <BlockIcon className="w-20 h-20" />
-            <p className="text-xl font-semibold">
+          <div className='w-full flex flex-col items-center justify-center py-5'>
+            <BlockIcon className='w-20 h-20' />
+            <p className='text-xl font-semibold'>
               Currently You Don't Have Any Ride
             </p>
           </div>
         )}
       </Card>
 
-      <Card className="mt-5 py-5">
+      <Card className='mt-5 py-5'>
         <CardHeader
-          title="Allocated To You"
+          title='Allocated To You'
           titleTypographyProps={{
             sx: {
               mb: 2.5,
-              lineHeight: "2rem !important",
-              letterSpacing: "0.15px !important",
-              fontWeight: "bold",
+              lineHeight: '2rem !important',
+              letterSpacing: '0.15px !important',
+              fontWeight: 'bold',
             },
           }}
         />
 
         {driver.allocated.length > 0 ? (
           driver?.allocated?.map((ride) => (
-            <AllocatedRideCard type="Allocated" key={ride.id} ride={ride} />
+            <AllocatedRideCard type='Allocated' key={ride.id} ride={ride} />
           ))
         ) : (
-          <div className="w-full flex flex-col items-center justify-center py-5">
-            <BlockIcon className="w-20 h-20" />
-            <p className="text-xl font-semibold">
+          <div className='w-full flex flex-col items-center justify-center py-5'>
+            <BlockIcon className='w-20 h-20' />
+            <p className='text-xl font-semibold'>
               Currently, no ride has been allocated.
             </p>
           </div>
         )}
-
-   
       </Card>
     </div>
   );

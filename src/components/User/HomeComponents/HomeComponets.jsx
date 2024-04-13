@@ -19,8 +19,10 @@ const validationSchema = Yup.object().shape({
 });
 
 const HomeComponets = () => {
-  const { auth, ride } = useSelector((store) => store);
-
+  const { auth, ride } = useSelector((store) => ({
+    auth: store.auth,
+    ride: store.ride,
+  }));
   const searchParams = useSearchParams();
   const [activeField, setActiveField] = useState(null);
   const router = useRouter();
@@ -28,7 +30,7 @@ const HomeComponets = () => {
   const dispatch = useDispatch();
 
   const handleOnSubmit = (event) => {
-    // console.log("handle on submit ---- ");
+    // ("handle on submit ---- ");
 
     const pickupLatitude = searchParams.get('pickup_lattitude');
     const pickupLongitude = searchParams.get('pickup_longitude');
@@ -48,7 +50,7 @@ const HomeComponets = () => {
 
     dispatch(requestRide({ location, router }));
 
-    console.log('handle submit location - ', location);
+    //'handle submit location - ', location;
   };
 
   useEffect(() => {
@@ -175,6 +177,7 @@ const HomeComponets = () => {
           </div>
 
           <Button
+            disabled={auth.user ? false : true}
             className=''
             sx={{
               width: '100%',
@@ -184,7 +187,7 @@ const HomeComponets = () => {
             color='secondary'
             type='submit'
           >
-            Find Driver
+            {auth.user ? 'Find Driver' : 'Login to book your cab'}
           </Button>
         </form>
       </div>

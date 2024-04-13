@@ -14,6 +14,7 @@ import {
 import { API_BASE_URL } from '@/config/api';
 
 // Register action creators
+export const clearError = () => ({ type: 'CLEAR_ERROR' });
 const registerRequest = () => ({ type: REGISTER_REQUEST });
 const registerSuccess = (user) => ({ type: REGISTER_SUCCESS, payload: user });
 const registerFailure = (error) => ({ type: REGISTER_FAILURE, payload: error });
@@ -27,10 +28,10 @@ export const registerUser = (userData) => async (dispatch) => {
     );
     const user = response.data;
     if (user.jwt) localStorage.setItem('jwt', user.jwt);
-    // console.log("registerr :",user)
+    // ("registerr :",user)
     dispatch(registerSuccess(user));
   } catch (error) {
-    dispatch(registerFailure(error.message));
+    dispatch(registerFailure(error.response.data.error ?? error.message));
   }
 };
 
@@ -44,10 +45,10 @@ export const registerDriver = (userData) => async (dispatch) => {
     );
     const user = response.data;
     if (user.jwt) localStorage.setItem('jwt', user.jwt);
-    console.log('register driver :', user);
+    //'register driver :', user;
     dispatch(registerSuccess(user));
   } catch (error) {
-    dispatch(registerFailure(error.message));
+    dispatch(registerFailure(error.response.data.error ?? error.message));
   }
 };
 
@@ -62,17 +63,18 @@ export const login = (userData) => async (dispatch) => {
     const response = await axios.post(`${API_BASE_URL}/auth/login`, userData);
     const user = response.data;
     if (user.jwt) localStorage.setItem('jwt', user.jwt);
-    console.log('login ', user);
+   // 'login ', user;
     dispatch(loginSuccess(user));
   } catch (error) {
-    dispatch(loginFailure(error.message));
+    // (error);
+    dispatch(loginFailure(error.response.data.error ?? error.message));
   }
 };
 
 //  get user from token
 export const getUser = (token) => {
   return async (dispatch) => {
-    // console.log('get user ', token);
+    // ('get user ', token);
     dispatch({ type: GET_USER_REQUEST });
     try {
       const response = await axios.get(`${API_BASE_URL}/user/profile`, {
@@ -82,17 +84,20 @@ export const getUser = (token) => {
       });
       const user = response.data;
       dispatch({ type: GET_USER_SUCCESS, payload: user });
-      // console.log('req User ', user);
+      // ('req User ', user);
     } catch (error) {
       const errorMessage = error.message;
-      dispatch({ type: GET_USER_FAILURE, payload: errorMessage });
+      dispatch({
+        type: GET_USER_FAILURE,
+        payload: error.response.data.error ?? errorMessage,
+      });
     }
   };
 };
 
 //  get Driver from token
 export const getDriver = (token) => {
-  // console.log('get driver ', token);
+  // ('get driver ', token);
   return async (dispatch) => {
     dispatch({ type: GET_USER_REQUEST });
     try {
@@ -103,10 +108,13 @@ export const getDriver = (token) => {
       });
       const user = response.data;
       dispatch({ type: GET_USER_SUCCESS, payload: user });
-      // console.log('req User ', user);
+      // ('req User ', user);
     } catch (error) {
       const errorMessage = error.message;
-      dispatch({ type: GET_USER_FAILURE, payload: errorMessage });
+      dispatch({
+        type: GET_USER_FAILURE,
+        payload: error.response.data.error ?? errorMessage,
+      });
     }
   };
 };

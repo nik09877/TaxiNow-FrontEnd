@@ -1,18 +1,25 @@
-"use client"
-import Layout from '@/components/User/Layout/Layout'
-import RideDetails from '@/components/User/RideDetails/RideDetails'
-import { useRouter } from 'next/navigation'
-import React from 'react'
+'use client';
+import Layout from '@/components/User/Layout/Layout';
+import RideDetails from '@/components/User/RideDetails/RideDetails';
+import { useRouter } from 'next/navigation';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 const page = (props) => {
+  const auth = useSelector((store) => store.auth);
   const router = useRouter();
-  const id  = router
-  console.log("slug",props.params.id)
+
+  useEffect(() => {
+    if (!auth?.user?.role || !auth.user?.fullName || !auth.user?.name) {
+      router.push('/login');
+    }
+  }, [auth.user]);
+
   return (
     <div>
-        <Layout children={<RideDetails rideId={props.params.id} />}></Layout>
+      <Layout children={<RideDetails rideId={props.params.id} />}></Layout>
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default page;
