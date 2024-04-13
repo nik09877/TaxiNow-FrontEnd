@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { findRideById } from '@/Redux/Ride/Action';
 
-const RideDetails = ({ rideId }) => {
+const RideDetailsHistory = ({ rideId }) => {
   const latitude = '19.1867193';
   const longitude = '72.8485884';
   const dispatch = useDispatch();
@@ -133,9 +133,6 @@ const RideDetails = ({ rideId }) => {
 
             {ride.rideDetails?.status === 'COMPLETED' ? (
               <Button
-                onClick={() =>
-                  router.replace(`/ride/${ride.rideDetails?.id}/payment`)
-                }
                 variant='contained'
                 color='secondary'
                 sx={{
@@ -144,7 +141,7 @@ const RideDetails = ({ rideId }) => {
                   padding: '.5rem 0rem',
                 }}
               >
-                Pay Now
+                Ride Completed
               </Button>
             ) : (
               <div className='flex justify-between items-center bg-yellow-600 text-white py-2 px-3'>
@@ -163,4 +160,4 @@ const RideDetails = ({ rideId }) => {
   );
 };
 
-export default RideDetails;
+export default RideDetailsHistory;

@@ -8,14 +8,14 @@ import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 const page = () => {
-  const router = useRouter();
-  const auth = useSelector((store) => store.auth);
+  // const router = useRouter();
+  // const auth = useSelector((store) => store.auth);
 
-  useEffect(() => {
-    if (!auth?.user?.role || !auth.user?.fullName || !auth.user?.name) {
-      router.push('/login');
-    }
-  }, [auth.user]);
+  // useEffect(() => {
+  //   if (!auth?.user?.role || !auth.user?.fullName || !auth.user?.name) {
+  //     router.push('/login');
+  //   }
+  // }, [auth.user]);
 
   return (
     <div>

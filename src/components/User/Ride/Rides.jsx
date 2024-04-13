@@ -25,9 +25,8 @@ const Rides = () => {
         <p className='text-center w-full'>Your Rides</p>
       </div>
       <div className='space-y-5 px-2 lg:px-5 h-[90vh] overflow-y-scroll'>
-        {user.completedRides.map((item) => (
-          <RideCard ride={item} />
-        ))}
+        {user.completedRides.length > 0 &&
+          user.completedRides.map((item) => <RideCard ride={item} />)}
       </div>
     </div>
   );

@@ -10,7 +10,7 @@ const page = (props) => {
   const router = useRouter();
 
   useEffect(() => {
-    if (!auth?.user?.role || !auth.user?.fullName || !auth.user?.name) {
+    if (!auth.user) {
       router.push('/login');
     }
   }, [auth.user]);

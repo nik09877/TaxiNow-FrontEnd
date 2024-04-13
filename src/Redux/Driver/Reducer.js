@@ -33,6 +33,11 @@ const driverReducer = (state = initialState, action) => {
       };
     case GET_ALLOCATED_RIDE_SUCCESS:
       return { ...state, loading: false, allocated: action.payload };
+    case 'REMOVE_ALLOCATED_RIDE':
+      return {
+        ...state,
+        allocated: state.allocated.filter((ride) => ride.id !== action.payload),
+      };
     case GET_CURRENT_RIDE_FAILURE:
     case GET_ALLOCATED_RIDE_FAILURE:
       return {

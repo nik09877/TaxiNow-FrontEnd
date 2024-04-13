@@ -2,6 +2,7 @@
 import {
   getAllocatedRides,
   getDriversCurrentRide,
+  removeAllocatedRide,
 } from '@/Redux/Driver/Action';
 import {
   acceptRideAction,
@@ -32,6 +33,7 @@ const AllocatedRideCard = ({ ride, type }) => {
   const handleAcceptRide = () => {
     // ('accept');
     dispatch(acceptRideAction(ride?.id));
+    dispatch(removeAllocatedRide(ride?.id));
   };
 
   const handleCompleteRide = () => {

@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import React from 'react';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Razorpay from 'razorpay';
+import useRazorpay from 'react-razorpay';
 import { api } from '@/config/api';
 import swal from 'sweetalert';
 
@@ -16,6 +16,7 @@ const PaymentPage = ({ rideId }) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const ride = useSelector((store) => store.ride);
+  const [Razorpay] = useRazorpay();
 
   useEffect(() => {
     dispatch(findRideById(rideId));
@@ -28,7 +29,7 @@ const PaymentPage = ({ rideId }) => {
   // };
 
   const handlePayment = async () => {
-    const { data } = await api.post(`/payments/${+rideId}`);
+    const { data } = await api.post(`/payment/${+rideId}`);
     const orderId = data.orderId;
 
     const options = {
@@ -39,16 +40,21 @@ const PaymentPage = ({ rideId }) => {
       description: 'Test Transaction',
       image: 'https://www.svgrepo.com/show/261072/rupee.svg',
       order_id: orderId,
-      handler: function (response) {
+      handler: async function (res) {
         swal(
           'Payment Successfull!',
           `Your Payment Id is : ${res.razorpay_payment_id}`,
           'success'
         );
-
-        alert(response.razorpay_payment_id);
-        alert(response.razorpay_order_id);
-        alert(response.razorpay_signature);
+        await api.get(
+          `/payment/success?payment_id=${
+            res.razorpay_payment_id
+          }&order_id=${+rideId}`
+        );
+        router.replace(`/ride/${rideId}/payment/success`);
+        // alert(response.razorpay_payment_id);
+        // alert(response.razorpay_order_id);
+        // alert(response.razorpay_signature);
       },
       prefill: {
         name: ride.rideDetails?.user?.name,

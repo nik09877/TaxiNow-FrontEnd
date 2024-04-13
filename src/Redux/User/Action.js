@@ -32,7 +32,7 @@ export const generatePaymentLink = (rideId) => {
     // dispatch({ type: GET_COMPLETED_RIDES_REQUEST });
 
     try {
-      const { data } = await api.post(`/payments/${+rideId}`);
+      const { data } = await api.post(`/payment/${+rideId}`);
       console.log(data);
       // 'payment', data;
 
